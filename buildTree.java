@@ -1,22 +1,23 @@
 class Solution {
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if(preorder == null || inorder == null ||inorder.length == 0 || preorder.length == 0)
-            return null;
-        TreeNode root = new TreeNode(preorder[0]);
-        if(preorder.length == 1) return root;
-        int cutPoint = -1;
-        for(int i = 0; i < inorder.length; i++){
-            if(inorder[i] == preorder[0]){
-                cutPoint = i;
-                break;
-            }
-        }
-        int[] leftPre = Arrays.copyOfRange(preorder, 1, cutPoint + 1);
-        int[] leftIn = Arrays.copyOfRange(inorder, 0, cutPoint);
-        int[] rightPre = Arrays.copyOfRange(preorder,  cutPoint + 1, preorder.length);
-        int[] rightIn = Arrays.copyOfRange(inorder, cutPoint + 1, inorder.length);
-        root.left = buildTree(leftPre, leftIn);
-        root.right = buildTree(rightPre, rightIn);
-        return root;
-    }
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+    return buildTree(inorder, inorder.length-1, 0, postorder, postorder.length-1);
+}
+
+private TreeNode buildTree(int[] inorder, int inStart, int inEnd, int[] postorder,
+		int postStart) {
+	if (postStart < 0 || inStart < inEnd)
+		return null;
+	
+	TreeNode root = new TreeNode(postorder[postStart]);
+	int rIndex = inStart;
+	for (int i = inStart; i >= inEnd; i--) {
+		if (inorder[i] == postorder[postStart]) {
+			rIndex = i;
+			break;
+		}
+	}
+	root.right = buildTree(inorder, inStart, rIndex + 1, postorder, postStart-1);
+	root.left = buildTree(inorder, rIndex - 1, inEnd, postorder, postStart - (inStart - rIndex) -1);
+	return root;
+}
 }
