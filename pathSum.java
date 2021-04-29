@@ -8,13 +8,13 @@ class Solution {
         return res;
     }
     
-    private int dfs(TreeNode root, int targetSum, List<Integer> ans, int currSum, List<List<Integer>> res){
+    private void dfs(TreeNode root, int targetSum, List<Integer> ans, int currSum, List<List<Integer>> res){
         if(root.left == null && root.right == null){
             if(currSum == targetSum){
                 res.add(new ArrayList(ans));
             }
             ans.remove(ans.size() - 1);
-            return 0;
+            return;
         }
         if(root.left != null){
             int leftVal = root.left.val;
@@ -27,6 +27,6 @@ class Solution {
             dfs(root.right, targetSum, ans, currSum + rightVal, res);
         }
         ans.remove(ans.size() - 1);
-        return currSum - root.val;
+        return;
     }
 }
